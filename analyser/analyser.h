@@ -51,7 +51,7 @@ namespace miniplc0 {
 
 		std::optional<CompilationError> analyseprimaryexpression(int prefix);
 
-		std::optional<CompilationError> analysefunctioncall(int flag);
+		std::optional<CompilationError> analysefunctioncall(int flag,int ifneed);
 
 		std::optional<CompilationError> analysefunctionvariable();
 

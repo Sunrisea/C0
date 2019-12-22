@@ -673,7 +673,7 @@ namespace miniplc0 {
 				if(next.value().GetType()==TokenType::LEFT_BRACKET){
 					unreadToken();
 					unreadToken();
-					auto err=analysefunctioncall(0);
+					auto err=analysefunctioncall(0,0);
 					if(err.has_value()){
 						return err;
 					}
@@ -1065,7 +1065,7 @@ namespace miniplc0 {
 				if(next.value().GetType()==TokenType::LEFT_BRACKET){
 					unreadToken();
 					unreadToken();
-					auto err = analysefunctioncall(1);
+					auto err = analysefunctioncall(1,1);
 					if(err.has_value()){
 						return err;
 					}
@@ -1090,7 +1090,7 @@ namespace miniplc0 {
 		return {};
 	}
 
-	std::optional<CompilationError> Analyser::analysefunctioncall(int flag){
+	std::optional<CompilationError> Analyser::analysefunctioncall(int flag,int ifneed){
 		auto next=nextToken();
 		if(!next.has_value()||next.value().GetType()!=TokenType::IDENTIFIER){
 			return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrInvalidInput);
@@ -1116,7 +1116,6 @@ namespace miniplc0 {
 				return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrNorightbracket);
 			}
 			_nowcode.emplace_back(Operation::call,x.second,0);
-			return {};
 		}
 		if(paramnum==1){
 			auto err=analyseexpression();
@@ -1149,7 +1148,9 @@ namespace miniplc0 {
 				return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrInvalidFunctioncall);
 			}
 			_nowcode.emplace_back(Operation::call,x.second,0);
-			return {};
+		}
+		if(ifneed==0&&_sign.backtype==1){
+			_nowcode.emplace_back(Operation::pop,0,0);
 		}
 		return {};
 	}
@@ -1467,7 +1468,7 @@ namespace miniplc0 {
 		else {
 			unreadToken();
 			unreadToken();
-			auto err=analysefunctioncall(0);
+			auto err=analysefunctioncall(0,0);
 			if(err.has_value()){
 				return err;
 			}
@@ -1501,7 +1502,7 @@ namespace miniplc0 {
 				else {
 					unreadToken();
 					unreadToken();
-					auto err=analysefunctioncall(0);
+					auto err=analysefunctioncall(0,0);
 					if(err.has_value()){
 						return err;
 					}
