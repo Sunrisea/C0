@@ -1127,7 +1127,7 @@ namespace miniplc0 {
 			if(!next.has_value()||(next.value().GetType()!=TokenType::RIGHT_BRACKET)){
 				return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrInvalidFunctioncall);
 			}
-			
+			_nowcode.emplace_back(Operation::call,x.second,0);
 		}
 		else{
 			auto err=analyseexpression();
