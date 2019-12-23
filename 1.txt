@@ -1,0 +1,24 @@
+int x=100;
+const int a=100;
+int printf(int num){
+    print(num);
+    x=99;
+    printf(123);
+    print(x);
+    return 123456;
+}
+int main(){
+    int x=100;
+    int i;
+    for(x=10;x>=0;x=x-1){
+        if(x==5){
+            break;
+        }
+        for(i=3;i>=0;i=i-1){
+            print(i,x);
+            if(x==7){
+                break;
+            }
+        }
+    }
+}
