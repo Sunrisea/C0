@@ -519,7 +519,7 @@ void Analyse(std::istream& input, std::ostream& output){
 	}
 	auto programcodes=analyser.getprogramcode();
 	for(i=0;i<programcodes.size();i++){
-		output<<".F"<<i<<std::endl;
+		output<<".F"<<i<<":"<<std::endl;
 		long long unsigned int j;
 		for(j=0;j<programcodes[i].size();j++){
 			output<<j<<"\t";

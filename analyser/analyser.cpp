@@ -725,6 +725,10 @@ namespace miniplc0 {
 					return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrDuplicateDeclaration);
 				}
 				auto name=next.value().GetValueString();
+				_sign.name=name;
+				_sign.type=0;
+				_sign._initialization=0;
+				_systable.addvariable(_sign);
 				next =nextToken();
 				if(!next.has_value()||(next.value().GetType()!=TokenType::EQUAL_SIGN)){
 					return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrConstantNeedValue);
@@ -733,11 +737,8 @@ namespace miniplc0 {
 				if(err.has_value()){
 					return err;
 				}
-				//插入符号表
-				_sign.name=name;
-				_sign.type=0;
-				_sign._initialization=1;
-				_systable.addvariable(_sign);
+				int num=_systable._signtable.size();
+				_systable._signtable[num-1]._initialization=1;
 				next=nextToken();
 				if(!next.has_value()||(next.value().GetType()!=TokenType::SEMICOLON&&next.value().GetType()!=TokenType::COMMA_SIGN)){
 					return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrInvalidInput);
@@ -753,6 +754,10 @@ namespace miniplc0 {
 							return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrDuplicateDeclaration);
 						}
 						auto name=next.value().GetValueString();
+						_sign.name=name;
+						_sign.type=0;
+						_sign._initialization=0;
+						_systable.addvariable(_sign);
 						next =nextToken();
 						if(!next.has_value()||(next.value().GetType()!=TokenType::EQUAL_SIGN)){
 							return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrConstantNeedValue);
@@ -762,10 +767,8 @@ namespace miniplc0 {
 							return err;
 						}
 						//插入符号表
-						_sign.name=name;
-						_sign.type=0;
-						_sign._initialization=1;
-						_systable.addvariable(_sign);
+						int num=_systable._signtable.size();
+						_systable._signtable[num-1]._initialization=1;
 						next=nextToken();
 						if(!next.has_value()||(next.value().GetType()!=TokenType::SEMICOLON&&next.value().GetType()!=TokenType::COMMA_SIGN)){
 							return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrInvalidInput);
@@ -801,18 +804,21 @@ namespace miniplc0 {
 					continue;
 				}
 				else if(next.value().GetType()==TokenType::EQUAL_SIGN){
+					_sign.name=name;
+					_sign.type=1;
+					_sign._initialization=0;
+					_systable.addvariable(_sign);
 					auto err=analyseexpression();
 					if(err.has_value()){
 						return err;
 					}
+					int num=_systable._signtable.size();
+					_systable._signtable[num-1]._initialization=1;
 					next=nextToken();
 					if(!next.has_value()||(next.value().GetType()!=TokenType::COMMA_SIGN&&next.value().GetType()!=TokenType::SEMICOLON)){
 						return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrConstantNeedValue);
 					}
-					_sign.name=name;
-					_sign.type=1;
-					_sign._initialization=1;
-					_systable.addvariable(_sign);
+					
 					if(next.value().GetType()==TokenType::SEMICOLON){
 						continue;
 					}
@@ -839,18 +845,21 @@ namespace miniplc0 {
 								break;
 							}
 							else if(next.value().GetType()==TokenType::EQUAL_SIGN){
+								_sign.name=name;
+								_sign.type=1;
+								_sign._initialization=0;
+								_systable.addvariable(_sign);
 								auto err=analyseexpression();
 								if(err.has_value()){
 									return err;
 								}
+								int num=_systable._signtable.size();
+								_systable._signtable[num-1]._initialization=1;
 								next=nextToken();
 								if(!next.has_value()||(next.value().GetType()!=TokenType::COMMA_SIGN&&next.value().GetType()!=TokenType::SEMICOLON)){
 									return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrConstantNeedValue);
 								}
-								_sign.name=name;
-								_sign.type=1;
-								_sign._initialization=1;
-								_systable.addvariable(_sign);
+								
 								if(next.value().GetType()==TokenType::SEMICOLON){
 									break;
 								}
@@ -896,18 +905,20 @@ namespace miniplc0 {
 							break;
 						}
 						else if(next.value().GetType()==TokenType::EQUAL_SIGN){
+							_sign.name=name;
+							_sign.type=1;
+							_sign._initialization=0;
+							_systable.addvariable(_sign);
 							auto err=analyseexpression();
 							if(err.has_value()){
 								return err;
 							}
+							int num=_systable._signtable.size();
+							_systable._signtable[num-1]._initialization=1;
 							next=nextToken();
 							if(!next.has_value()||(next.value().GetType()!=TokenType::COMMA_SIGN&&next.value().GetType()!=TokenType::SEMICOLON)){
 								return std::make_optional<CompilationError>(_current_pos,ErrorCode::ErrConstantNeedValue);
 							}
-							_sign.name=name;
-							_sign.type=1;
-							_sign._initialization=1;
-							_systable.addvariable(_sign);
 							if(next.value().GetType()==TokenType::SEMICOLON){
 								break;
 							}
